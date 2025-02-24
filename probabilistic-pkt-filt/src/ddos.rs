@@ -1,5 +1,5 @@
 use crate::packet_filter::PacketFilter;
-use rand::seq::SliceRandom;
+use rand::seq::{IndexedRandom, SliceRandom};
 use rand::Rng;
 use std::collections::HashSet;
 use std::time::Instant;
@@ -14,6 +14,7 @@ fn random_ip() -> String {
         rng.random_range(1..=255)
     )
 }
+
 pub fn ddos_test() {
     let blacklist_size = 100_000;
     let test_packet_count = 1_000_000;
@@ -34,20 +35,20 @@ pub fn ddos_test() {
     // Generate Incoming Packets
     println!("Generating {} incoming packets...", test_packet_count);
     let mut incoming_packets = Vec::new();
+    let mut rng = rand::rng();
+
     let attack_packets: Vec<String> = blacklist_ips
-        .choose_multiple(
-            &mut rand::thread_rng(),
-            (test_packet_count as f64 * attack_ratio) as usize,
-        )
+        .choose_multiple(&mut rng, (test_packet_count as f64 * attack_ratio) as usize)
         .cloned()
         .collect();
+
     let normal_packets: Vec<String> = (0..test_packet_count - attack_packets.len())
         .map(|_| random_ip())
         .collect();
 
     incoming_packets.extend(attack_packets);
     incoming_packets.extend(normal_packets);
-    incoming_packets.shuffle(&mut rand::thread_rng());
+    incoming_packets.shuffle(&mut rng);
 
     // Start Benchmarking
     println!("Running DDoS filtering benchmark...");

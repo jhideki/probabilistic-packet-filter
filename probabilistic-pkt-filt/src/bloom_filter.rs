@@ -16,7 +16,7 @@ impl BloomFilter {
         }
     }
 
-    fn hash<T: Hash>(&self, item: &T, i: usize) -> usize {
+    fn hash<T: Hash + ?Sized>(&self, item: &T, i: usize) -> usize {
         let mut hasher1 = DefaultHasher::new();
         let mut hasher2 = DefaultHasher::new();
 
@@ -30,7 +30,7 @@ impl BloomFilter {
     }
 
     /// Insert an item into the Bloom filter
-    pub fn insert<T: Hash>(&mut self, item: &T) {
+    pub fn insert<T: Hash + ?Sized>(&mut self, item: &T) {
         for i in 0..self.hash_count {
             let index = self.hash(item, i);
             self.set_bit(index);
@@ -38,7 +38,7 @@ impl BloomFilter {
     }
 
     /// Check if an item is possibly in the set
-    pub fn contains<T: Hash>(&self, item: &T) -> bool {
+    pub fn contains<T: Hash + ?Sized>(&self, item: &T) -> bool {
         for i in 0..self.hash_count {
             let index = self.hash(item, i);
             if !self.get_bit(index) {
