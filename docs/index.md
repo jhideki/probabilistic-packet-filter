@@ -13,3 +13,4 @@ The project will test Bloom Filter performance by similuating the following scen
 4. Load Balancing in High-Traffic Networks
 
 [Biweekly Update 1](./biweekly1.md)
+[Biweekly Update 2](./biweekly2.md)
