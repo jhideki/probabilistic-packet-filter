@@ -12,5 +12,5 @@ The project will test Bloom Filter performance by similuating the following scen
 3. Content Delivery Networks (CDNs) & Caching
 4. Load Balancing in High-Traffic Networks
 
-[Biweekly Update 1](./biweekly1.md)
+[Biweekly Update 1](./biweekly1.md) <br>
 [Biweekly Update 2](./biweekly2.md)

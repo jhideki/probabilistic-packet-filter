@@ -14,17 +14,17 @@
 
 #### **Packet Filter false positive rate**
 
-In this update, I made improvements to the DDos attack benchmarking. The simulation code was refactored to seperate bloom filter testing and hashset testing
+In this update, I made improvements to the DDos attack benchmarking. The simulation code was refactored to separate Bloom Filter testing and HashSet testing
 for filtering out attack packets. The following changes were made:
 
-- The Ddos module was moved from a single function to a struct. The struct implemention contains seperate functions for both bloom filter implementationns and hashmap.
-- Timestamps were updated to properly record hashset vs bloom filter performance
+- The DDoS module was moved from a single function to a struct. The struct implementation contains separate functions for both Bloom Filter implementations and HashMap.
+- Timestamps were updated to properly record HashSet vs Bloom Filter performance
 
 Bloom filter false positive output:
 
 ```bash
 ========================================
-Running ddos test with bloom filter implementation
+Running ddos test with Bloom Filter implementation
 Running DDoS filtering benchmark...
 === DDoS Packet Filtering Performance ===
 Total Packets Checked: 1000000
@@ -35,13 +35,13 @@ False Negatives: 0 (0.00%)
 ========================================
 ```
 
-The bloom filter was set to a false positive rate of 0.1 and outputed a false positive
-rate of 0.02%. The bloom filter immplementation took 0.06 sec. Hashets will never output a false positive thus the bloom filter implementaion provides
-lower accuracy than the hashset implementation.
+The Bloom Filter was set to a false positive rate of 0.1 and outputed a false positive
+rate of 0.02%. The Bloom Filter implementation took 0.06 sec. HashSets will never output a false positive thus the Bloom Filter implementation provides
+lower accuracy than the HashSet implementation.
 
 #### **DDoS Attack Memory Usage:**
 
-Heaptrack was used to monitor memory usage. main.rs was updated to accept command-line arguments to conditionally run either the bloom filter or hashset implementation of
+Heaptrack was used to monitor memory usage. main.rs was updated to accept command-line arguments to conditionally run either the Bloom Filter or HashSet implementation of
 the packet filter based off the --bloom flag.
 Example usage:
 
@@ -49,15 +49,15 @@ Example usage:
 cargo run --release -- --test ddos --bloom
 ```
 
-This way I was able to test the bloom filter and hashset implementations of the packet filter seperatly as heaptrack monitors the memeory usage of the entire program.
+This way I was able to test the Bloom Filter and HashSet implementations of the packet filter separately as heaptrack monitors the memory usage of the entire program.
 Heaptrack usage
 
 ```bash
 heaptrack cargo run --release -- --test ddos
 ```
 
-The folling is the memory usage statistics for both the hashset and bloom filter implementations the packet filter.
-Hashet implementation:
+The following is the memory usage statistics for both the HashSet and Bloom Filter implementations the packet filter.
+HashSet implementation:
 
 ```bash
 heaptrack stats:
@@ -66,7 +66,7 @@ heaptrack stats:
 	temporary allocations:	79753
 ```
 
-Bloom filter implentation:
+Bloom filter implementation:
 
 ```bash
 heaptrack stats:
@@ -75,17 +75,17 @@ heaptrack stats:
 	temporary allocations:	79753
 ```
 
-As shown above the bloom filter has more allocations than the hashset. This contradicts results in Bloom's paper on space/time tradeoffs as the bloom filter is expected to
-have overall fewer memory allocations than the hashset. Further investigation is required to determine why this contradiction is occuring.
+As shown above the Bloom Filter has more allocations than the HashSet. This contradicts results in Bloom's paper on space/time tradeoffs as the Bloom Filter is expected to
+have overall fewer memory allocations than the HashSet. Further investigation is required to determine why this contradiction is occurring.
 
 ### **Changes in the Repository:**
 
-- **Refactored probabilistic filter implementation** to use an existing rust implemntaion of the bloom filter.
-- **Refactored Ddos module to sepearte perforamnce testing and false positive testing**
+- **Refactored probabilistic filter implementation** to use an existing rust implementation of the Bloom Filter.
+- **Refactored DDoS module to separate performance testing and false positive testing**
 
 ### **Next Steps:**
 
-- Investigate why the hashset is performing better than the bloom filter
+- Investigate why the HashSet is performing better than the Bloom Filter
 - Potentially implement both HashSet and Bloom filter in C for more controlled benchmarking
 - Investigate performance in other applications of packet filters
-- Explore performance of bloom filters when modifying false postive rate
+- Explore performance of Bloom Filters when modifying false positive rate
