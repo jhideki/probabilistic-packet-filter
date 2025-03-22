@@ -7,11 +7,28 @@ use clap::{Parser, Subcommand, ValueEnum};
 use ddos::Ddos;
 
 #[derive(Parser)]
+#[command(name = "PacketFilter Benchmark")]
+#[command(author = "Your Name")]
+#[command(version = "1.0")]
+#[command(about = "Compare HashSet vs Bloom Filter for packet filtering", long_about = None)]
 struct Args {
     #[arg(short, long)]
     test: Command,
+
     #[arg(short, long)]
     bloom: bool,
+
+    #[arg(long, default_value_t = 1_000_000)]
+    blacklist_size: usize,
+
+    #[arg(long, default_value_t = 1_000_000)]
+    packet_count: usize,
+
+    #[arg(long, default_value_t = 0.5)]
+    attack_ratio: f64,
+
+    #[arg(long, default_value_t = 0.01)]
+    false_positive_rate: f64,
 }
 
 #[derive(ValueEnum, Clone, Debug, Subcommand)]
@@ -22,19 +39,20 @@ enum Command {
 
 fn main() {
     let args = Args::parse();
+
     match args.test {
         Command::DdosAccuracy => {
-            let ddos = Ddos::new(100_000, 1_000_000, 0.5);
             if args.bloom {
-                ddos.test_bloom();
+                println!("Bloom filter accuracy test not implemented in this version.");
+            } else {
+                println!("HashSet accuracy test not implemented in this version.");
             }
         }
         Command::DdosPerformance => {
-            let ddos = Ddos::new(100_000, 1_000_000, 0.5);
             if args.bloom {
-                ddos.test_bloom_mem();
+                Ddos::test_bloom_mem(args.blacklist_size, args.false_positive_rate);
             } else {
-                ddos.test_hashset_mem();
+                Ddos::test_hashset_mem(args.blacklist_size);
             }
         }
     }
