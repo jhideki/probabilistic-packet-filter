@@ -19,10 +19,8 @@
 
 Two new benchmarking tools were introduced:
 
-1. `insertion_time_benchmark.sh`: Runs time-based insertion tests from 100k to 1M entries using both data structures, writing results to CSV.
+1. `insertion_time_benchmark.sh`: Runs time-based insertion tests from 100k to 5M entries using both data structures, writing results to CSV.
 2. `proc_benchmark.sh`: Profiles `/proc/<pid>/status` data after 1-second runs to capture memory usage for Bloom Filter and HashSet, exporting to `bloomfilter_mem.csv` and `hashset_mem.csv`.
-
-These tools allow for clearer, head-to-head performance tracking with consistent testing conditions and controlled FP rates.
 
 ---
 
@@ -66,20 +64,14 @@ Insertion timing, recorded using the `insertion_time_benchmark.sh`, also showed 
 
 - Added `benchmark_results/` folder for all generated CSV data.
 - New `.sh` scripts to handle batch timing and `/proc` memory capture.
+- Two new rust projects created to benchmark performance
 - Both Bloom and HashSet test projects now support CLI args for insertion count and FP rate.
-- Makefile targets updated for reproducible builds.
+- Updated the pkt filter code to simulate client server architecure
 
 ---
 
 ### **Next Steps:**
 
-- Extend testing up to 100M entries to test asymptotic behavior
-- Add plot generation scripts for visual reporting in Markdown and LaTeX
-- Investigate Bloom filters with varying false positive rates (0.01, 0.001, 0.0001)
-- Begin drafting results for mid-project report and GitHub Wiki documentation
+- Full writen report + demo of packet filter
 
----
 
-### **References:**
-
-1. Bloom Filter Theory & Practice. IEEE Communications Surveys, 2023.
