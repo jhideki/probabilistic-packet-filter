@@ -33,15 +33,15 @@ These tools allow for clearer, head-to-head performance tracking with consistent
 
 | N    | VmRSS (KB) - HashSet | VmRSS (KB) - BloomFilter |
 | ---- | -------------------- | ------------------------ |
-| 100k | 3244                 | 2484                     |
-| 500k | 11196                | 6692                     |
-| 1M   | 17896                | 11744                    |
+| 100k | 3244                 | 2740                     |
+| 1M   | 20428                | 3680                     |
+| 2M   | 38976                | 4932                     |
 
 **Observations:**
 
-- BloomFilter consistently used ~30-40% less memory than HashSet at all scales.
-- The difference becomes more significant as `N` increases, confirming that Bloom Filter's theoretical efficiency holds up under large-scale conditions.
-- Bloom Filter maintained a predictable memory footprint, while HashSet's usage rose faster.
+- At 100k insertions, memory usage is relatively close.
+- At 1M, the HashSet uses over 5.5x the memory of the Bloom Filter.
+- By 2M insertions, that difference increases to nearly 8x, confirming the Bloom Filter’s substantial memory efficiency.
 
 ---
 
@@ -52,15 +52,13 @@ Insertion timing, recorded using the `insertion_time_benchmark.sh`, also showed 
 
 | N    | Time (ms) - HashSet | Time (ms) - BloomFilter |
 | ---- | ------------------- | ----------------------- |
-| 100k | ~12.4               | ~9.1                    |
-| 500k | ~60.7               | ~45.2                   |
-| 1M   | ~122.3              | ~88.5                   |
+| 100k | ~1.47               | ~2.69                   |
+| 5M   | ~81.10              | ~182.17                 |
 
 **Analysis:**
 
-- BloomFilter offered ~25-30% faster insertions.
-- Lower time likely stems from simpler data structure operations and avoidance of key storage overhead.
-- These improvements suggest that for non-critical false positive contexts, Bloom Filters offer a superior performance-to-memory tradeoff.
+- BloomFilter is approximetly 2x slower than the hashset
+- Likely cuased by multiple hashfunctions and bit manipultaion overhead
 
 ---
 
