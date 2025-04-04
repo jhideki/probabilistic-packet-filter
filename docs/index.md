@@ -15,4 +15,4 @@ The project will test Bloom Filter performance by similuating the following scen
 [Biweekly Update 1](./biweekly1.md) <br>
 [Biweekly Update 2](./biweekly2.md)
 [Biweekly Update 3](./biweekly3.md)
-[Biweekly Update 3](./biweekly4.md)
+[Biweekly Update 4](./biweekly4.md)
