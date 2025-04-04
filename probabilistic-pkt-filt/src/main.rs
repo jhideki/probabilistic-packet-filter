@@ -1,59 +1,51 @@
-mod bloom_filter;
-mod ddos;
-mod packet_filter;
-mod utils;
+mod bloom;
+mod client;
+mod filter;
+mod server;
 
-use clap::{Parser, Subcommand, ValueEnum};
-use ddos::Ddos;
-
-#[derive(Parser)]
-#[command(name = "PacketFilter Benchmark")]
-#[command(author = "Your Name")]
-#[command(version = "1.0")]
-#[command(about = "Compare HashSet vs Bloom Filter for packet filtering", long_about = None)]
-struct Args {
-    #[arg(short, long)]
-    test: Command,
-
-    #[arg(short, long)]
-    bloom: bool,
-
-    #[arg(long, default_value_t = 1_000_000)]
-    blacklist_size: usize,
-
-    #[arg(long, default_value_t = 1_000_000)]
-    packet_count: usize,
-
-    #[arg(long, default_value_t = 0.5)]
-    attack_ratio: f64,
-
-    #[arg(long, default_value_t = 0.01)]
-    false_positive_rate: f64,
-}
-
-#[derive(ValueEnum, Clone, Debug, Subcommand)]
-enum Command {
-    DdosAccuracy,
-    DdosPerformance,
-}
+use crate::bloom::BloomWrapper;
+use crate::client::start_client;
+use crate::server::start_server;
+use std::sync::Arc;
 
 fn main() {
-    let args = Args::parse();
+    // Create bloom filter and populate with blocked IPs
+    let mut bloom = BloomWrapper::new(1000, 0.01);
+    bloom.insert("192.168.1.100");
+    bloom.insert("10.0.0.5");
 
-    match args.test {
-        Command::DdosAccuracy => {
-            if args.bloom {
-                println!("Bloom filter accuracy test not implemented in this version.");
-            } else {
-                println!("HashSet accuracy test not implemented in this version.");
-            }
-        }
-        Command::DdosPerformance => {
-            if args.bloom {
-                Ddos::test_bloom_mem(args.blacklist_size, args.false_positive_rate);
-            } else {
-                Ddos::test_hashset_mem(args.blacklist_size);
-            }
-        }
+    let shared_bloom = Arc::new(bloom);
+
+    // Start simulated server with integrated packet filter
+    let server_handle = {
+        let bloom_clone = shared_bloom.clone();
+        std::thread::spawn(move || {
+            start_server("127.0.0.1:8080", bloom_clone);
+        })
+    };
+
+    // Start multiple simulated clients concurrently
+    let fake_ips = vec![
+        "192.168.1.100", // blocked
+        "192.168.1.101",
+        "10.0.0.5", // blocked
+        "172.16.0.20",
+        "203.0.113.50",
+    ];
+
+    let mut client_handles = Vec::new();
+
+    for ip in fake_ips {
+        let ip_string = ip.to_string();
+        let addr = "127.0.0.1:8080".to_string();
+        let handle = std::thread::spawn(move || {
+            start_client(&addr, &ip_string);
+        });
+        client_handles.push(handle);
+    }
+
+    let _ = server_handle.join();
+    for handle in client_handles {
+        let _ = handle.join();
     }
 }
