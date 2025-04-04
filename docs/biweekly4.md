@@ -29,7 +29,7 @@ These tools allow for clearer, head-to-head performance tracking with consistent
 ### **Memory Benchmark Results:**
 
 **VmRSS (Resident Memory)** showed expected trends as insertions scaled:
-![Memory VmRSS](../graphs/vmrss_comparison.jpg)
+![Memory VmRSS](assets/vmrss_comparison.jpg)
 
 | N    | VmRSS (KB) - HashSet | VmRSS (KB) - BloomFilter |
 | ---- | -------------------- | ------------------------ |
@@ -47,7 +47,7 @@ These tools allow for clearer, head-to-head performance tracking with consistent
 
 ### **Insertion Time Benchmark Results:**
 
-![Insertion Time Graph](../graphs/vmrss_comparison.jpg)
+![Insertion Time Graph](assets/insertion_time_comparison.jpg)
 Insertion timing, recorded using the `insertion_time_benchmark.sh`, also showed favorable results for BloomFilter:
 
 | N    | Time (ms) - HashSet | Time (ms) - BloomFilter |

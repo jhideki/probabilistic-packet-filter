@@ -33,7 +33,7 @@ plt.title("VmRSS vs Number of Inserts")
 plt.legend()
 plt.grid(True)
 plt.tight_layout()
-plt.savefig("graphs/vmrss_comparison.jpg", dpi=300)
+plt.savefig("docs/assets/vmrss_comparison.jpg", dpi=300)
 plt.close()
 
 # === Plot VmSize Comparison ===
@@ -46,11 +46,11 @@ plt.title("VmSize vs Number of Inserts")
 plt.legend()
 plt.grid(True)
 plt.tight_layout()
-plt.savefig("graphs/vmsize_comparison.jpg", dpi=300)
+plt.savefig("docs/assets/vmsize_comparison.jpg", dpi=300)
 plt.close()
 
 # === Plot Insertion Time ===
-insertion_df = pd.read_csv("insertion_times.csv")
+insertion_df = pd.read_csv("benchmark_results/insertion_times.csv")
 insertion_df.columns = insertion_df.columns.str.strip()
 
 # Split into two separate DataFrames
@@ -66,7 +66,7 @@ plt.title("Insertion Time vs Number of Inserts")
 plt.legend()
 plt.grid(True)
 plt.tight_layout()
-plt.savefig("graphs/insertion_time_comparison.jpg", dpi=300)
+plt.savefig("docs/assets/insertion_time_comparison.jpg", dpi=300)
 plt.close()
 
 print("✅ All plots saved in the 'graphs/' directory.")
